@@ -49,3 +49,24 @@ Ejemplo: `docker service update --update-failure-action rollback --update-max-fa
 
 ## Regresar un servicio a su estado anterior
 `docker service rollback {service_name}`
+
+## Crear un servicio que tiene configuración inicial de puertos y replicas
+`docker service create -d --name app --publish 3000:3000 --replicas=6 omiguelperez/swarm-hostname`
+
+## Crear un servicio de visualización
+`docker service create -d --name viz -p 8080:8080 --constraint=node.role==manager --mount=type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock dockersamples/visualizer`
+
+## Actualizar un servicio para ejecutar tareas como worker
+`docker service update --constraint-add node.role==worker --update-parallelism=0 app`
+
+## Cambiar disponibilidad de un nodo
+`docker node update --availability {availability} {worker_name}`
+
+### Poner nodo como no disponible 
+Ejemplo: `docker node update --availability drain worker2`
+
+### Poner nodo como disponible
+
+`docker node update --availability active worker2`
+
+`docker service update -d --env-add UNA_VARIABLE=de-entorno --update-parallelism=2 app`
